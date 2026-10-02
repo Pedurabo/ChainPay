@@ -1757,6 +1757,39 @@ private fun MerchantReceiveScreen(
 
                         } else {
 
+                            HorizontalDivider()
+
+                            Text(
+                                text =
+                                    "AWAITING PAYMENT",
+                                style =
+                                    MaterialTheme
+                                        .typography
+                                        .headlineSmall,
+                                fontWeight =
+                                    FontWeight.Bold
+                            )
+
+                            Text(
+                                text =
+                                    "$requestedAmount Sepolia ETH",
+                                style =
+                                    MaterialTheme
+                                        .typography
+                                        .headlineSmall,
+                                fontWeight =
+                                    FontWeight.Bold
+                            )
+
+                            Text(
+                                text =
+                                    "Share the QR code or payment URI with the customer.",
+                                style =
+                                    MaterialTheme
+                                        .typography
+                                        .bodyMedium
+                            )
+
                             Text(
                                 text =
                                     if (
@@ -1764,7 +1797,7 @@ private fun MerchantReceiveScreen(
                                     ) {
                                         "Confirming Sepolia transaction..."
                                     } else {
-                                        "Waiting for customer payment"
+                                        "Waiting for transaction submission"
                                     },
                                 style =
                                     MaterialTheme
@@ -1806,13 +1839,13 @@ private fun MerchantReceiveScreen(
                                 ) {
 
                                     Text(
-                                        "Test Pay This Request"
+                                        "Developer: Test Pay This Request"
                                     )
                                 }
 
                                 Text(
                                     text =
-                                        "One-device test: sends this exact request from your connected wallet.",
+                                        "Development helper only: simulates the customer paying this exact request from the connected wallet.",
                                     style =
                                         MaterialTheme
                                             .typography
@@ -2117,6 +2150,7 @@ private fun generatePaymentQrCode(
             )
         }
 }
+
 
 
 

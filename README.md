@@ -84,7 +84,7 @@ A Sepolia payment therefore does not currently appear in the Mainnet recent-tran
 - [x] M5A - Merchant Receive
 - [x] M5B - ERC-681 QR payment requests
 - [x] M5C - Persistent merchant request and direct receipt confirmation
-- [ ] M5D - Merchant UX polish
+- [x] M5D - Merchant UX polish
 - [ ] M6 - Release and portfolio hardening
 
 ## Current Limitations
@@ -111,7 +111,6 @@ Debug build:
 
 ## Next
 
-- Merchant payment UX polish
 - Stablecoin payment support
 - Payment history
 - Broader wallet testing
@@ -121,3 +120,4 @@ Debug build:
 ## Author
 
 Developed by [Joshua Wabulo](https://github.com/Pedurabo).
+

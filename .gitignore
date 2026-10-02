@@ -22,3 +22,8 @@ secret.properties
 *.tmp
 .DS_Store
 Thumbs.db
+*.backup
+*-backup
+*-diagnostic.txt
+*-debug.txt
+repair-*.ps1

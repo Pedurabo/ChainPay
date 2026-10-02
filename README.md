@@ -85,7 +85,7 @@ A Sepolia payment therefore does not currently appear in the Mainnet recent-tran
 - [x] M5B - ERC-681 QR payment requests
 - [x] M5C - Persistent merchant request and direct receipt confirmation
 - [x] M5D - Merchant UX polish
-- [ ] M6 - Release and portfolio hardening
+- [x] M6 - Release and portfolio hardening
 
 ## Current Limitations
 
@@ -93,7 +93,8 @@ A Sepolia payment therefore does not currently appear in the Mainnet recent-tran
 - The dashboard currently reads Ethereum Mainnet while Merchant Mode uses Sepolia.
 - USDC sending is not implemented yet.
 - Merchant confirmation currently follows the transaction submitted by ChainPay rather than discovering arbitrary incoming payments.
-- Broader wallet interoperability and automated testing are still in progress.
+- Broader wallet interoperability is still in progress.
+- Automated unit coverage currently protects payment conversion, Ethereum address validation, ERC-681 generation, and merchant receipt validation.
 
 ## Security
 
@@ -114,10 +115,10 @@ Debug build:
 - Stablecoin payment support
 - Payment history
 - Broader wallet testing
-- Automated tests
-- Release hardening
 
 ## Author
 
 Developed by [Joshua Wabulo](https://github.com/Pedurabo).
+
+
 

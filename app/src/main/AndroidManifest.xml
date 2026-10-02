@@ -5,7 +5,7 @@
 
     <application
         android:name=".ChainPayApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:label="ChainPay"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar">
@@ -36,3 +36,4 @@
     </application>
 
 </manifest>
+

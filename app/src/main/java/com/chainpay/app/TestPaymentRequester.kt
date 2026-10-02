@@ -7,7 +7,6 @@ import android.widget.Toast
 import com.reown.appkit.client.AppKit
 import com.reown.appkit.client.models.request.Request
 import com.reown.appkit.client.models.request.SentRequestResult
-import java.math.BigDecimal
 
 object TestPaymentRequester {
 
@@ -15,13 +14,7 @@ object TestPaymentRequester {
         Handler(
             Looper.getMainLooper()
         )
-
-    private val ethereumAddressRegex =
-        Regex(
-            "^0x[a-fA-F0-9]{40}$"
-        )
-
-    private fun showToast(
+private fun showToast(
         context: Context,
         message: String
     ) {
@@ -51,7 +44,7 @@ object TestPaymentRequester {
             amountEth.trim()
 
         if (
-            !ethereumAddressRegex.matches(
+            !PaymentLogic.isValidEthereumAddress(
                 from
             )
         ) {
@@ -71,7 +64,7 @@ object TestPaymentRequester {
         }
 
         if (
-            !ethereumAddressRegex.matches(
+            !PaymentLogic.isValidEthereumAddress(
                 to
             )
         ) {
@@ -89,26 +82,13 @@ object TestPaymentRequester {
 
             return
         }
-
-        val wei =
+        val valueHex =
             try {
 
-                val eth =
-                    BigDecimal(
+                PaymentLogic
+                    .weiHex(
                         amount
                     )
-
-                if (
-                    eth <= BigDecimal.ZERO
-                ) {
-                    throw IllegalArgumentException(
-                        "Amount must be greater than zero."
-                    )
-                }
-
-                eth
-                    .movePointRight(18)
-                    .toBigIntegerExact()
 
             } catch (
                 error: Exception
@@ -130,10 +110,6 @@ object TestPaymentRequester {
                 return
             }
 
-        val valueHex =
-            "0x" +
-                wei.toString(16)
-
         val params =
             """[{"from":"$from","to":"$to","value":"$valueHex"}]"""
 
@@ -144,7 +120,7 @@ object TestPaymentRequester {
                 params =
                     params,
                 chainId =
-                    "eip155:11155111"
+                    PaymentLogic.SEPOLIA_CAIP_CHAIN_ID
             )
 
         PaymentState.markRequesting()
@@ -209,3 +185,4 @@ object TestPaymentRequester {
         }
     }
 }
+

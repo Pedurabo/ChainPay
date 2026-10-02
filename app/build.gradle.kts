@@ -51,6 +51,7 @@ android {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
     implementation("com.google.zxing:core:3.5.4")
 
     val composeBom =
@@ -109,5 +110,6 @@ dependencies {
         "androidx.compose.ui:ui-tooling"
     )
 }
+
 
 

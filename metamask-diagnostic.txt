@@ -1,0 +1,55 @@
+﻿10-02 12:01:16.188 D/ActivityManager( 1248): force stop from com.android.server.am.ActivityManagerService.forceStopPackage:4699 com.android.server.am.ActivityManagerShellCommand.runForceStop:1236 
+10-02 12:01:16.188 I/ActivityManager( 1248): Force stopping com.chainpay.app appid=10411 user=0: from pid 7192
+10-02 12:01:16.194 I/ActivityManager( 1248): Killing 4525:com.chainpay.app/u0a411 (adj 0): stop com.chainpay.app due to from pid 7192
+10-02 12:01:16.197 D/ActivityManager( 1248): proc ProcessRecord{67ee0fc 4525:com.chainpay.app/u0a411} already removed. so we skip next process.
+10-02 12:01:16.316 V/ActivityManager( 1248): Got obituary of 4525:com.chainpay.app
+10-02 12:01:16.316 W/ActivityManager( 1248): setHasOverlayUi called on unknown pid: 4525
+10-02 12:01:16.339 D/ActivityTaskManager( 1248): startActivityAsUser: callingPid=7202, callingUid=2000, caller=com.android.server.wm.ActivityTaskManagerService.startActivityAsUser:1815 com.android.server.am.ActivityManagerService.startActivityAsUserWithFeature:3714 com.android.server.am.ActivityManagerShellCommand.runStartActivity:656 com.android.server.am.ActivityManagerShellCommand.onCommand:222 com.android.modules.utils.BasicShellCommandHandler.exec:97 android.os.ShellCommand.exec:38 com.android.server.am.ActivityManagerService.onShellCommand:11152 
+10-02 12:01:16.367 I/ActivityManager( 1248): Start proc 7210:com.chainpay.app/u0a411 for top-activity {com.chainpay.app/com.chainpay.app.MainActivity}
+10-02 12:01:16.409 I/ActivityManager( 1248): DSS OFF for com.chainpay.app
+10-02 12:01:16.419 I/ActivityManager( 1248): Changes in 10411 20 to 2, 0 to 15
+10-02 12:01:16.419 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:16.434 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:17.348 I/ActivityManager( 1248): Changes in 10411 2 to 12, 15 to 0
+10-02 12:01:19.491 W/System.err( 7210): com.reown.android.internal.common.exception.GenericException: Error while connecting, please check your Internet connection or contact support: Unable to resolve host "relay.walletconnect.org": No address associated with hostname
+10-02 12:01:19.491 W/System.err( 7210): 	at com.reown.android.utils.ExtensionsKt.getToWalletConnectException(Extensions.kt:49)
+10-02 12:01:35.726 E/ActivityManager( 1248): Cancel pending or running compactions as system is awake
+10-02 12:01:35.744 D/ActivityTaskManager( 1248): SafeActivityOptions created, mOriginalCallingPid=1248, mOriginalCallingUid=1000, options=ActivityOptions(73917578), mPackageName=null, mAnimationType=-1, mStartX=0, mStartY=0, mWidth=0, mHeight=0, caller=com.android.server.am.PendingIntentRecord.sendInner:471 com.android.server.am.ActivityManagerService.sendIntentSender:6557 com.android.server.am.ActivityManagerService.sendIntentSender:6546 android.app.PendingIntent.sendAndReturnResult:1029 android.app.PendingIntent.send:1000 com.android.server.alarm.AlarmManagerService$DeliveryTracker.deliverLocked:6377 com.android.server.alarm.AlarmManagerService.deliverAlarmsLocked:5218 
+10-02 12:01:35.744 D/ActivityManager( 1248): Received BROADCAST intent 0x4b9342 Key{broadcastIntent pkg=android intent=act=FIRST_ALARM_TRIGGER_ACTION flg=0x40000000 pkg=android flags=0x4000000 u=0} requestCode=0 sent=0 from uid 1000
+10-02 12:01:35.880 I/ActivityManager( 1248): Process com.sec.android.app.sbrowser (pid 3375) has died: cch+99 CEM (263,4204)
+10-02 12:01:36.921 I/ActivityManager( 1248): Changes in 10059 19 to 5, 0 to 8
+10-02 12:01:37.288 I/ActivityManager( 1248): Changes in 10411 12 to 2, 0 to 15
+10-02 12:01:37.289 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:37.294 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:37.310 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:37.554 I/ActivityManager( 1248): Changes in 10054 19 to 5, 0 to 8
+10-02 12:01:41.300 I/TopTaskTracker( 2901): getCachedTopTask : tasks = [TaskInfo{userId=0 taskId=16078 displayId=0 isRunning=true baseIntent=Intent { flg=0x10000000 cmp=com.chainpay.app/.MainActivity } baseActivity=ComponentInfo{com.chainpay.app/com.chainpay.app.MainActivity} topActivity=ComponentInfo{com.chainpay.app/com.chainpay.app.MainActivity} origActivity=null realActivity=ComponentInfo{com.chainpay.app/com.chainpay.app.MainActivity} numActivities=1 lastActiveTime=318704203 supportsSplitScreenMultiWindow=true supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@bbc19c3} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=0 displayCutoutSafeInsets=Rect(0, 78 - 0, 0) topActivityInfo=ActivityInfo{ec29240 com.chainpay.app.MainActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isSleeping=true topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden originallySupportedSplitScreen=true hasWallpaper=false isTopTransparentActivity=false topActivityInFixedAspectRatio=false topActivityInDisplayCompat=false topActivityInBoundsCompat=false topActivityBounds=null}, TaskInfo{userId=0 taskId=16077 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.VIEW dat=metamask://wc/... flg=0x10000000 pkg=io.metamask cmp=io.metamask/.MainActivity } baseActivity=ComponentInfo{io.metamask/io.metamask.MainActivity} topActivity=ComponentInfo{io.metamask/io.metamask.MainActivity} origActivity=null realActivity=ComponentInfo{io.metamask/io.metamask.MainActivity} numActivities=1 lastActiveTime=318620524 supportsSplitScreenMultiWindow=true supportsMultiWindow=true resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@ee7f579} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=0 displayCutoutSafeInsets=Rect(0, 78 - 0, 0) topActivityInfo=ActivityInfo{a2492be io.metamask.MainActivity} launchCookies=[com.android.launcher3.util.ObjectWrapper@33c8f1f] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false locusId=null displayAreaFeatureId=1 cameraCompatControlState=hidden originallySupportedSplitScreen=true hasWallpaper=false isTopTransparentActivity=false topActivityInFixedAspectRatio=false topActivityInDisplayCompat=false topActivityInBoundsCompat=false topActivityBounds=null}, TaskInfo{userId=0 taskId=15784 displayId=0 isRunning=true baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10000100 cmp=com.sec.android.app.launcher/.activities.LauncherActivity } baseActivity=ComponentInfo{com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity} topActivity=ComponentInfo{com.sec.android.app.launcher/com.android.launcher3.uioverrides.QuickstepLauncher} origActivity=ComponentInfo{com.sec.android.app.launcher/com.sec.android.app.launcher.activities.LauncherActivity} realActivity=ComponentInfo{com.sec.android.app.launcher/com.android.launcher3.uioverrides.QuickstepLauncher} numActivities=1 lastActiveTime=318381513 supportsSplitScreenMultiWindow=true supportsMultiWindow=true resizeMode=2 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{android.window.IWindowContainerToken$Stub$Proxy@9e0dc3c} topActivityType=2 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=0 displayCutoutSafeInsets=Rect(0, 78 - 0, 0) topActivityInfo=ActivityInfo{a403dc5 com.sec.android.app.launcher.activities.LauncherActivity} launchCookies=[] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isSleeping=false topActivityInSizeCompat=false topActivityEligibleForLetterboxEducation= false locusId=LocusId[
+10-02 12:01:41.323 I/ActivityManager( 1248): Changes in 10129 5 to 2, 8 to 15
+10-02 12:01:41.330 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:41.340 I/ApplyLoadPlanOperationImpl( 2901): taskId = 16077, ComponentInfo{io.metamask/io.metamask.MainActivity}
+10-02 12:01:41.377 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:41.392 I/AppIconSolution( 2901): getThemeIconWithBG called with public API, pkg = io.metamask, mode = 48
+10-02 12:01:41.393 I/AppIconSolution( 2901): return adaptive icon for io.metamask, isNight = true
+10-02 12:01:41.394 I/LauncherActivityInfo( 2901): packageName: io.metamask, useThemeIcon: false, height: 216, width: 216, density: 480
+10-02 12:01:41.399 I/SuggestedItemsFacade( 2901): filteredItem : io.metamask/io.metamask.MainActivity#0
+10-02 12:01:41.399 I/SuggestedItemsFacade( 2901): item removed by filter - io.metamask
+10-02 12:01:41.816 D/ActivityManagerPerformance( 1248): AMP_acquire() HOME
+10-02 12:01:41.838 I/ActivityManager( 1248): Changes in 10411 2 to 15, 15 to 0
+10-02 12:01:41.879 I/AppInfo ( 2901): set ComponentInfo{io.metamask/io.metamask.MainActivity} app progress level to 100
+10-02 12:01:41.885 I/SuggestedItemsFacade( 2901): DPS items : MetaMask, ComponentInfo{io.metamask/io.metamask.MainActivity}
+10-02 12:01:42.743 I/ActivityManager( 1248): Killing 7210:com.chainpay.app/u0a411 (adj 900): remove task
+10-02 12:01:42.744 D/ActivityManager( 1248): [SD] user menu kill listen remove action name:com.chainpay.app uid:10411
+10-02 12:01:42.828 W/ActivityManager( 1248): setHasOverlayUi called on unknown pid: 7210
+10-02 12:01:43.454 I/ActivityManager( 1248): Changes in 10059 5 to 15, 8 to 0
+10-02 12:01:43.565 I/ActivityManager( 1248): Changes in 10054 5 to 15, 8 to 0
+10-02 12:01:44.485 I/ActivityManager( 1248): Start proc 7508:com.chainpay.app/u0a411 for activelaunch {com.chainpay.app/com.chainpay.app.MainActivity}
+10-02 12:01:44.536 I/ActivityManager( 1248): DSS OFF for com.chainpay.app
+10-02 12:01:44.544 D/ActivityManagerPerformance( 1248): AMP_acquire() APP_SWITCH
+10-02 12:01:44.571 I/ActivityManager( 1248): Changes in 10411 20 to 2, 0 to 15
+10-02 12:01:44.571 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:44.593 I/ActivityManager( 1248): updateOomAdj start time is before than pendingPid added, don't delete it
+10-02 12:01:45.751 I/ActivityManager( 1248): PendingStartActivityUids startActivity to updateOomAdj delay:1190ms, uid:10411
+10-02 12:01:46.506 D/ActivityManagerPerformance( 1248): AMP_acquire() TAIL
+10-02 12:01:46.506 D/ActivityManagerPerformance( 1248): AMP_release() APP_SWITCH
+10-02 12:01:46.549 I/ActivityManager( 1248): Changes in 10129 2 to 5, 15 to 8
+10-02 12:01:46.559 D/FreecessController( 1248): io.metamask(state: Initial -> Freezeable, Reason: uidIdle)

@@ -1604,15 +1604,48 @@ private fun MerchantReceiveScreen(
                                 null
                         ) {
 
+                            HorizontalDivider()
+
+                            Text(
+                                text =
+                                    "PAID",
+                                style =
+                                    MaterialTheme
+                                        .typography
+                                        .headlineSmall,
+                                fontWeight =
+                                    FontWeight.Bold
+                            )
+
                             Text(
                                 text =
                                     "Payment received",
                                 style =
                                     MaterialTheme
                                         .typography
-                                        .titleMedium,
+                                        .titleLarge,
                                 fontWeight =
                                     FontWeight.Bold
+                            )
+
+                            Text(
+                                text =
+                                    "$requestedAmount Sepolia ETH",
+                                style =
+                                    MaterialTheme
+                                        .typography
+                                        .headlineSmall,
+                                fontWeight =
+                                    FontWeight.Bold
+                            )
+
+                            Text(
+                                text =
+                                    "Network: Sepolia",
+                                style =
+                                    MaterialTheme
+                                        .typography
+                                        .bodySmall
                             )
 
                             receivedFromAddress
@@ -1621,20 +1654,22 @@ private fun MerchantReceiveScreen(
 
                                     Text(
                                         text =
-                                            "From " +
-                                                shorten(
-                                                    sender
-                                                ),
-                                        style =
-                                            MaterialTheme
-                                                .typography
-                                                .bodySmall
+                                            "Paid by",
+                                        fontWeight =
+                                            FontWeight.Bold
+                                    )
+
+                                    Text(
+                                        text =
+                                            shorten(
+                                                sender
+                                            )
                                     )
                                 }
 
                             Text(
                                 text =
-                                    "Transaction",
+                                    "Transaction hash",
                                 fontWeight =
                                     FontWeight.Bold
                             )
@@ -1644,8 +1679,52 @@ private fun MerchantReceiveScreen(
                                     shorten(
                                         receivedTransactionHash
                                             ?: ""
-                                    )
+                                    ),
+                                style =
+                                    MaterialTheme
+                                        .typography
+                                        .bodyMedium
                             )
+
+                            Button(
+                                onClick = {
+
+                                    val hash =
+                                        receivedTransactionHash
+                                            ?: return@Button
+
+                                    val clipboard =
+                                        context
+                                            .getSystemService(
+                                                android.content.ClipboardManager::class.java
+                                            )
+
+                                    clipboard
+                                        .setPrimaryClip(
+                                            android.content.ClipData
+                                                .newPlainText(
+                                                    "ChainPay transaction hash",
+                                                    hash
+                                                )
+                                        )
+
+                                    android.widget.Toast
+                                        .makeText(
+                                            context,
+                                            "Transaction hash copied.",
+                                            android.widget.Toast.LENGTH_SHORT
+                                        )
+                                        .show()
+                                },
+                                modifier =
+                                    Modifier
+                                        .fillMaxWidth()
+                            ) {
+
+                                Text(
+                                    "Copy Transaction Hash"
+                                )
+                            }
 
                             Button(
                                 onClick = {
@@ -2038,6 +2117,7 @@ private fun generatePaymentQrCode(
             )
         }
 }
+
 
 
 

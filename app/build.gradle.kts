@@ -1,4 +1,4 @@
-﻿import java.util.Properties
+import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -29,14 +29,22 @@ android {
         applicationId = "com.chainpay.app"
         minSdk = 26
         targetSdk = 37
-        versionCode = 4
-        versionName = "0.4.0"
+        versionCode = 9
+        versionName = "0.9.0"
 
         buildConfigField(
             "String",
             "REOWN_PROJECT_ID",
             "\"$reownProjectId\""
         )
+    }
+    buildTypes {
+        release {
+            // Keep shrinking off until the Reown/payment stack has dedicated
+            // release-mode ProGuard/R8 regression coverage.
+            isMinifyEnabled = false
+            isShrinkResources = false
+        }
     }
 
     buildFeatures {
@@ -110,7 +118,3 @@ dependencies {
         "androidx.compose.ui:ui-tooling"
     )
 }
-
-
-
-

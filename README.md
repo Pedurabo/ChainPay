@@ -1,124 +1,270 @@
-﻿# ChainPay
+# ChainPay
 
-Native Android Web3 payment application built with Kotlin and Jetpack Compose.
+**Native Android wallet, blockchain and crypto-payment integration built with Kotlin and Jetpack Compose.**
 
-ChainPay combines Ethereum wallet data, WalletConnect-based transactions, QR merchant payment requests, and direct Sepolia transaction confirmation in a native Android application.
+ChainPay demonstrates practical Android/Web3 integration: Ethereum data, external-wallet connectivity, ETH and ERC-20 transaction preparation, confirmation monitoring, restart recovery and merchant payment requests.
 
-> Status: active development. Payment and Merchant Mode currently use Ethereum Sepolia testnet.
+**Current demo version:** 0.9.0
 
-## Features
+**Repository:** https://github.com/Pedurabo/ChainPay
 
-### Wallet Dashboard
-- Ethereum Mainnet ETH balance
-- ERC-20 USDC balance
-- Recent Ethereum transaction history
+## What ChainPay demonstrates
+
+- Ethereum JSON-RPC integration from Android
+- ETH and USDC wallet balances
+- recent Ethereum transaction history
+- Reown / WalletConnect external-wallet sessions
+- Sepolia ETH payment requests
+- ERC-20 USDC calldata generation
+- transaction receipt confirmation
+- pending-payment recovery after app restart
+- merchant payment requests and QR sharing
+- transaction explorer integration
+- Android release and security hardening
+
+ChainPay does not request or store wallet seed phrases or private keys.
+
+## Wallet dashboard
+
+The read-only dashboard uses Ethereum Mainnet and supports:
+
+- ETH balance
+- USDC balance
+- recent transaction history
+- incoming/outgoing transaction direction
 - Ethereum address validation
-- ViewModel + StateFlow driven Compose UI
+- loading and error states
 
-### Wallet Connection
-- Reown AppKit / WalletConnect integration
-- External wallet approval
-- Sepolia session support
-- Wallet JSON-RPC response handling
-- Deep-link return handling
-- Physical-device flow validated with SafePal
+Dashboard architecture:
 
-### Payments
-- Recipient and ETH amount entry
-- ETH to wei conversion
-- Explicit Sepolia chain binding: eip155:11155111
-- eth_sendTransaction requests
-- Pending, success, and error states
-- Transaction hash display and copy
-- Sepolia explorer integration
+```text
+Jetpack Compose UI
+        |
+        v
+WalletViewModel
+        |
+        v
+EthereumRepository
+        |
+        +---- Ethereum JSON-RPC
+        |
+        +---- Blockscout
+```
 
-### Merchant Mode
-- Merchant receiving address
-- Requested ETH amount
-- Optional payment reference
-- ERC-681 payment URI
-- ZXing QR-code generation
-- Persistent active merchant requests
-- One-device payment testing
+## Wallet connection
 
-### On-chain Confirmation
-ChainPay captures the exact transaction hash returned by the wallet and verifies it directly through Sepolia JSON-RPC using eth_getTransactionReceipt.
+ChainPay uses Reown / WalletConnect to hand transaction approval to an external Android wallet.
 
-A successful receipt with the expected recipient changes the merchant request state to Payment received.
+Implemented wallet behavior includes:
 
-This avoids depending on rate-limited explorer transaction-list polling.
+- session pairing
+- connected-address recovery
+- session recovery after app restart
+- wallet disconnection detection
+- cleanup after a real session disconnect
+- Sepolia transaction requests
 
-## Stack
+SafePal has provided the working end-to-end Sepolia ETH payment path during development.
 
-- Kotlin
-- Jetpack Compose
-- ViewModel
-- Coroutines / Flow
-- Reown AppKit
-- WalletConnect
-- Ethereum JSON-RPC
-- ERC-20
-- ERC-681
-- ZXing
-- Android SharedPreferences
+## Direct payments
 
-## Networks
+Direct ETH payments use Sepolia rather than Mainnet.
+
+The payment lifecycle is:
+
+```text
+IDLE
+  |
+  v
+REQUESTING
+  |
+  v
+AWAITING_WALLET
+  |
+  v
+SUBMITTED
+  |
+  +----> SUCCESS / confirmed
+  |
+  +----> ERROR / reverted
+  |
+  +----> CONFIRMATION_TIMEOUT
+```
+
+A returned transaction hash means submitted, not confirmed. ChainPay polls the Sepolia transaction receipt before reporting confirmation.
+
+Submitted payment state is persisted so confirmation monitoring can recover after process death or app restart.
+
+## USDC support
+
+ChainPay implements Sepolia USDC transfer preparation using ERC-20 `transfer(address,uint256)`.
+
+Implemented behavior includes:
+
+- Sepolia USDC contract targeting
+- 6-decimal amount conversion
+- transfer calldata encoding
+- rejection of invalid or over-precision amounts
+- zero native ETH value for token transfer requests
+- external-wallet transaction submission
+- independent ETH and USDC payment state
+
+**Current limitation:** the live Sepolia USDC transfer is still pending test-USDC funding. The implementation and tests are present, but this repository does not claim an end-to-end live token transfer that has not yet been performed.
+
+## Merchant Mode
+
+Merchant Mode supports:
+
+- Sepolia ETH payment-request creation
+- merchant address and amount validation
+- optional payment note
+- ERC-681 payment URI generation
+- QR-code generation
+- copying the payment URI
+- Android share sheet
+- payment monitoring
+- sender and transaction-hash display
+- Sepolia explorer navigation
+
+Merchant monitoring remains separate from direct-wallet payment state.
+
+## Network responsibilities
 
 | Feature | Network |
 | --- | --- |
-| Wallet dashboard | Ethereum Mainnet |
-| ETH and USDC reads | Ethereum Mainnet |
-| Recent dashboard transactions | Ethereum Mainnet |
-| Wallet payment testing | Sepolia |
-| Merchant Mode | Sepolia |
-| Merchant payment confirmation | Sepolia |
+| ETH balance | Ethereum Mainnet |
+| USDC balance | Ethereum Mainnet |
+| Recent transactions | Ethereum Mainnet |
+| Direct ETH payments | Sepolia |
+| Direct USDC payments | Sepolia |
+| Merchant payment requests | Sepolia |
+| Receipt confirmation | Sepolia |
 
-A Sepolia payment therefore does not currently appear in the Mainnet recent-transactions list.
+This separation lets ChainPay demonstrate real public blockchain reads while keeping payment testing on a test network.
 
-## Milestones
+## Technology
 
-- [x] M1 - Ethereum blockchain reader
-- [x] M2 - Wallet dashboard, transaction history, and USDC
-- [x] M3 - WalletConnect / Reown integration
-- [x] M4 - Sepolia payment flow and payment-result UX
-- [x] M5A - Merchant Receive
-- [x] M5B - ERC-681 QR payment requests
-- [x] M5C - Persistent merchant request and direct receipt confirmation
-- [x] M5D - Merchant UX polish
-- [x] M6 - Release and portfolio hardening
+- Kotlin
+- Jetpack Compose
+- Android SDK 37
+- Minimum SDK 26
+- JDK 17
+- Gradle 9.6
+- Android Gradle Plugin 9.4.0
+- Reown AppKit / WalletConnect
+- Ethereum JSON-RPC
+- Blockscout API
+- Kotlin coroutines and StateFlow
+- ERC-20 ABI encoding
+- ZXing QR generation
 
-## Current Limitations
+## Security approach
 
-- Payments currently use Sepolia test ETH.
-- The dashboard currently reads Ethereum Mainnet while Merchant Mode uses Sepolia.
-- USDC sending is not implemented yet.
-- Merchant confirmation currently follows the transaction submitted by ChainPay rather than discovering arbitrary incoming payments.
-- Broader wallet interoperability is still in progress.
-- Automated unit coverage currently protects payment conversion, Ethereum address validation, ERC-681 generation, and merchant receipt validation.
+- private keys and seed phrases remain in the external wallet
+- Android backups are disabled
+- cleartext network traffic is disabled
+- raw SDK exceptions are not shown directly to users
+- sensitive diagnostic logging is debug-only
+- transaction submission and confirmation are separate states
+- local credential configuration is excluded from Git
+- provider credentials embedded in an APK are not treated as true secrets
 
-## Security
+Production-secret credentials should be kept behind an appropriate backend rather than embedded in an Android client.
 
-Never commit wallet seed phrases, private keys, signing keys, RPC credentials, or WalletConnect/Reown credentials.
+## Local setup
 
-Local configuration and secrets must remain outside source control.
+Requirements:
 
-## Build
+- Android Studio / Android SDK
+- JDK 17
+- Android device or emulator
+- WalletConnect-compatible wallet for payment testing
+- Reown project ID
 
-Requirements: Android Studio, JDK 17, and the Android SDK.
+Clone:
 
-Debug build:
+```bash
+git clone https://github.com/Pedurabo/ChainPay
+cd ChainPay
+```
 
-    ./gradlew assembleDebug
+Configure local-only values in `local.properties`. Do not commit this file.
 
-## Next
+Example:
 
-- Stablecoin payment support
-- Payment history
-- Broader wallet testing
+```properties
+sdk.dir=C\:\\path\\to\\Android\\Sdk
+REOWN_PROJECT_ID=YOUR_REOWN_PROJECT_ID
+```
 
-## Author
+Build on Windows:
 
-Developed by [Joshua Wabulo](https://github.com/Pedurabo).
+```powershell
+.\gradlew.bat assembleDebug
+```
 
+Run unit tests:
 
+```powershell
+.\gradlew.bat testDebugUnitTest
+```
 
+Build the release variant:
+
+```powershell
+.\gradlew.bat assembleRelease
+```
+
+## Verified project behavior
+
+Development regression testing has covered:
+
+- debug build, install and launch
+- release compilation
+- wallet-session recovery
+- wallet disconnection
+- Sepolia ETH transaction submission
+- transaction receipt confirmation
+- submitted-payment restart recovery
+- confirmation timeout handling
+- merchant request sharing
+- merchant payment monitoring
+- explorer navigation
+- user-facing error sanitization
+
+## Status
+
+**Completed:**
+
+- blockchain reader
+- wallet dashboard
+- ETH and USDC balances
+- transaction history
+- external wallet connection
+- Sepolia ETH payments
+- receipt confirmation
+- restart-safe payment recovery
+- Merchant Mode
+- QR/share workflow
+- security hardening
+- release build configuration
+- launcher branding
+
+**Remaining before 1.0:**
+
+- fund the test wallet with Sepolia USDC
+- execute and verify a live USDC transfer
+- capture final portfolio screenshots / demo evidence
+- final release review
+
+## Portfolio focus
+
+> I integrate Web3 wallets, token balances, blockchain transactions and crypto/stablecoin payments into Android apps using Kotlin.
+
+ChainPay focuses on the Android engineering surrounding blockchain transactions: validation, wallet handoff, persistence, lifecycle recovery, confirmation, failure handling, security and merchant UX.
+
+## Disclaimer
+
+ChainPay is currently a portfolio/testnet application. Sepolia assets have no real monetary value.
+
+It should not be treated as production financial infrastructure without additional security review, testing, operational controls and production backend design.

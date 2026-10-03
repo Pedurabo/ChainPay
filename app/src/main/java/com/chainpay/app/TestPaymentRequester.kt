@@ -1,4 +1,4 @@
-﻿package com.chainpay.app
+package com.chainpay.app
 
 import android.content.Context
 import android.os.Handler
@@ -51,7 +51,7 @@ private fun showToast(
             val message =
                 "Connected wallet address is invalid."
 
-            PaymentState.markError(
+            PaymentState.markError(PaymentAsset.ETH,
                 message
             )
 
@@ -71,7 +71,7 @@ private fun showToast(
             val message =
                 "Enter a valid Ethereum recipient address."
 
-            PaymentState.markError(
+            PaymentState.markError(PaymentAsset.ETH,
                 message
             )
 
@@ -95,10 +95,9 @@ private fun showToast(
             ) {
 
                 val message =
-                    error.message
-                        ?: "Enter a valid ETH amount."
+                    "Enter a valid positive ETH amount."
 
-                PaymentState.markError(
+                PaymentState.markError(PaymentAsset.ETH,
                     message
                 )
 
@@ -123,7 +122,7 @@ private fun showToast(
                     PaymentLogic.SEPOLIA_CAIP_CHAIN_ID
             )
 
-        PaymentState.markRequesting()
+        PaymentState.markRequesting(PaymentAsset.ETH)
 
         try {
 
@@ -134,7 +133,7 @@ private fun showToast(
                         _: SentRequestResult ->
 
                     PaymentState
-                        .markAwaitingWallet()
+                        .markAwaitingWallet(PaymentAsset.ETH, walletAddress)
 
                     showToast(
                         context,
@@ -146,13 +145,9 @@ private fun showToast(
                         error: Throwable ->
 
                     val message =
-                        "Payment request failed: " +
-                            (
-                                error.localizedMessage
-                                    ?: "Unknown error."
-                            )
+                        "Payment request could not be sent. Check the wallet connection and try again."
 
-                    PaymentState.markError(
+                    PaymentState.markError(PaymentAsset.ETH,
                         message
                     )
 
@@ -168,13 +163,9 @@ private fun showToast(
         ) {
 
             val message =
-                "Payment request failed: " +
-                    (
-                        error.localizedMessage
-                            ?: "Unknown error."
-                    )
+                        "Payment request could not be sent. Check the wallet connection and try again."
 
-            PaymentState.markError(
+            PaymentState.markError(PaymentAsset.ETH,
                 message
             )
 
@@ -185,4 +176,3 @@ private fun showToast(
         }
     }
 }
-

@@ -1,4 +1,4 @@
-﻿package com.chainpay.app.viewmodel
+package com.chainpay.app.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -44,6 +44,24 @@ class WalletViewModel :
         }
     }
 
+    fun clearConnectedWallet() {
+
+        _uiState.update {
+
+            it.copy(
+                walletAddress = "",
+                ethBalance = "--",
+                usdcBalance = "--",
+                isLoading = false,
+                hasLoadedWallet = false,
+                errorMessage = null,
+                transactions =
+                    emptyList(),
+                status =
+                    "Wallet disconnected."
+            )
+        }
+    }
     fun checkWallet() {
 
         val address =

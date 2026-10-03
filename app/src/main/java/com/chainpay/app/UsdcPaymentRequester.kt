@@ -1,4 +1,4 @@
-﻿package com.chainpay.app
+package com.chainpay.app
 
 import android.content.Context
 import android.os.Handler
@@ -56,7 +56,7 @@ object UsdcPaymentRequester {
             val message =
                 "Connected wallet address is invalid."
 
-            PaymentState.markError(
+            PaymentState.markError(PaymentAsset.USDC,
                 message
             )
 
@@ -84,10 +84,9 @@ object UsdcPaymentRequester {
             ) {
 
                 val message =
-                    error.message
-                        ?: "Enter a valid USDC payment."
+                    "Enter a valid recipient and positive USDC amount with no more than 6 decimal places."
 
-                PaymentState.markError(
+                PaymentState.markError(PaymentAsset.USDC,
                     message
                 )
 
@@ -113,7 +112,7 @@ object UsdcPaymentRequester {
                         .SEPOLIA_CAIP_CHAIN_ID
             )
 
-        PaymentState.markRequesting()
+        PaymentState.markRequesting(PaymentAsset.USDC)
 
         try {
 
@@ -125,7 +124,7 @@ object UsdcPaymentRequester {
                         _: SentRequestResult ->
 
                     PaymentState
-                        .markAwaitingWallet()
+                        .markAwaitingWallet(PaymentAsset.USDC, walletAddress)
 
                     showToast(
                         context,
@@ -137,13 +136,9 @@ object UsdcPaymentRequester {
                         error: Throwable ->
 
                     val message =
-                        "USDC payment request failed: " +
-                            (
-                                error.localizedMessage
-                                    ?: "Unknown error."
-                            )
+                        "USDC payment request could not be sent. Check the wallet connection and try again."
 
-                    PaymentState.markError(
+                    PaymentState.markError(PaymentAsset.USDC,
                         message
                     )
 
@@ -159,13 +154,9 @@ object UsdcPaymentRequester {
         ) {
 
             val message =
-                "USDC payment request failed: " +
-                    (
-                        error.localizedMessage
-                            ?: "Unknown error."
-                    )
+                        "USDC payment request could not be sent. Check the wallet connection and try again."
 
-            PaymentState.markError(
+            PaymentState.markError(PaymentAsset.USDC,
                 message
             )
 

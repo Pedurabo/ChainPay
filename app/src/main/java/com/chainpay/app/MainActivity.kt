@@ -1,4 +1,4 @@
-﻿@file:OptIn(
+@file:OptIn(
     androidx.compose.material.ExperimentalMaterialApi::class
 )
 
@@ -219,6 +219,13 @@ private fun ChainPayScreen(
                 initial = false
             )
 
+    var hasObservedConnectedSession by
+        rememberSaveable {
+            mutableStateOf(
+                false
+            )
+        }
+
     LaunchedEffect(
         walletConnected
     ) {
@@ -226,6 +233,9 @@ private fun ChainPayScreen(
         if (
             walletConnected
         ) {
+
+            hasObservedConnectedSession =
+                true
 
             val connectedAddress =
                 withContext(
@@ -247,9 +257,32 @@ private fun ChainPayScreen(
                         connectedAddress
                     )
 
+                PaymentState
+                    .restorePending(
+                        connectedAddress
+                    )
+
                 viewModel
                     .checkWallet()
+
+            } else {
+
+                viewModel
+                    .clearConnectedWallet()
             }
+
+        } else if (
+            hasObservedConnectedSession
+        ) {
+
+            hasObservedConnectedSession =
+                false
+
+            viewModel
+                .clearConnectedWallet()
+
+            PaymentState
+                .reset()
         }
     }
 
@@ -559,8 +592,12 @@ private fun WalletConnectionCard(
     val context =
         LocalContext.current
 
-    val paymentState by
-        PaymentState.state
+    val ethPaymentState by
+        PaymentState.ethState
+            .collectAsState()
+
+    val usdcPaymentState by
+        PaymentState.usdcState
             .collectAsState()
 
     var recipientAddress by
@@ -575,6 +612,13 @@ private fun WalletConnectionCard(
             )
         }
 
+
+    var amountUsdc by
+        rememberSaveable {
+            mutableStateOf(
+                "1"
+            )
+        }
     Card(
         modifier =
             Modifier.fillMaxWidth(),
@@ -721,7 +765,9 @@ private fun WalletConnectionCard(
                                 .isNotBlank() &&
                             amountEth
                                 .isNotBlank() &&
-                            !paymentState
+                            !ethPaymentState
+                                .isPending &&
+                            !usdcPaymentState
                                 .isPending,
                     modifier =
                         Modifier
@@ -730,10 +776,10 @@ private fun WalletConnectionCard(
 
                     Text(
                         if (
-                            paymentState
+                            ethPaymentState
                                 .isPending
                         ) {
-                            "Payment pending..."
+                            if (ethPaymentState.status == PaymentStatus.REQUESTING) "Preparing payment..." else "Review in wallet..."
                         } else {
                             "Send Sepolia Payment"
                         }
@@ -744,21 +790,174 @@ private fun WalletConnectionCard(
 
                 Text(
                     text =
-                        "Payment status",
+                        "ETH payment status",
                     fontWeight =
                         FontWeight.Bold
                 )
 
                 Text(
                     text =
-                        paymentState.message,
+                        ethPaymentState.message,
                     style =
                         MaterialTheme
                             .typography
                             .bodyMedium
                 )
 
-                paymentState
+                ethPaymentState
+                    .transactionHash
+                    ?.let {
+                            transactionHash ->
+
+                        Text(
+                            text =
+                                "Transaction hash",
+                            fontWeight =
+                                FontWeight.Bold
+                        )
+
+                        Text(
+                            text =
+                                shorten(
+                                    transactionHash
+                                ),
+                            style =
+                                MaterialTheme
+                                    .typography
+                                    .bodyMedium
+                        )
+
+                        Button(
+                            onClick = {
+
+                                val intent =
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        android.net.Uri.parse(
+                                            "https://sepolia.etherscan.io/tx/$transactionHash"
+                                        )
+                                    )
+
+                                context.startActivity(
+                                    intent
+                                )
+                            },
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                        ) {
+
+                            Text(
+                                "View ETH on Sepolia Etherscan"
+                            )
+                        }
+                    }
+
+                Text(
+                    text =
+                        "USDC payment",
+                    style =
+                        MaterialTheme
+                            .typography
+                            .titleMedium,
+                    fontWeight =
+                        FontWeight.Bold
+                )
+
+                Text(
+                    text =
+                        "Send native USDC on Ethereum Sepolia.",
+                    style =
+                        MaterialTheme
+                            .typography
+                            .bodySmall
+                )
+
+                OutlinedTextField(
+                    value =
+                        amountUsdc,
+                    onValueChange = {
+                        amountUsdc =
+                            it
+                    },
+                    modifier =
+                        Modifier
+                            .fillMaxWidth(),
+                    label = {
+                        Text(
+                            "Amount (Sepolia USDC)"
+                        )
+                    },
+                    placeholder = {
+                        Text(
+                            "1"
+                        )
+                    },
+                    singleLine =
+                        true
+                )
+
+                Button(
+                    onClick = {
+
+                        UsdcPaymentRequester
+                            .sendUsdcPayment(
+                                context =
+                                    context,
+                                walletAddress =
+                                    walletAddress,
+                                recipientAddress =
+                                    recipientAddress,
+                                amountUsdc =
+                                    amountUsdc
+                            )
+                    },
+                    enabled =
+                        walletAddress
+                            .isNotBlank() &&
+                            recipientAddress
+                                .isNotBlank() &&
+                            amountUsdc
+                                .isNotBlank() &&
+                            !usdcPaymentState
+                                .isPending &&
+                            !ethPaymentState
+                                .isPending,
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                ) {
+
+                    Text(
+                        if (
+                            usdcPaymentState
+                                .isPending
+                        ) {
+                            "Payment pending..."
+                        } else {
+                            "Send Sepolia USDC"
+                        }
+                    )
+                }
+                HorizontalDivider()
+
+                Text(
+                    text =
+                        "USDC payment status",
+                    fontWeight =
+                        FontWeight.Bold
+                )
+
+                Text(
+                    text =
+                        usdcPaymentState.message,
+                    style =
+                        MaterialTheme
+                            .typography
+                            .bodyMedium
+                )
+
+                usdcPaymentState
                     .transactionHash
                     ?.let {
                             transactionHash ->
@@ -1521,7 +1720,7 @@ private fun MerchantReceiveScreen(
 
                         Text(
                             text =
-                                "Scan to pay",
+                                "Customer payment",
                             style =
                                 MaterialTheme
                                     .typography
@@ -1545,7 +1744,7 @@ private fun MerchantReceiveScreen(
 
                         Text(
                             text =
-                                "ERC-681 Payment URI",
+                                "Payment link",
                             fontWeight =
                                 FontWeight.Bold
                         )
@@ -1599,6 +1798,63 @@ private fun MerchantReceiveScreen(
                             )
                         }
 
+                        Button(
+                            onClick = {
+
+                                val referenceLine =
+                                    if (
+                                        paymentNote.isNotBlank()
+                                    ) {
+                                        "\nReference: $paymentNote"
+                                    } else {
+                                        ""
+                                    }
+
+                                val shareText =
+                                    "ChainPay payment request" +
+                                        "\nAmount: $requestedAmount Sepolia ETH" +
+                                        "\nNetwork: Sepolia" +
+                                        "\nTo: $merchantAddress" +
+                                        referenceLine +
+                                        "\n\nPayment link:" +
+                                        "\n$paymentUri"
+
+                                val shareIntent =
+                                    Intent(
+                                        Intent.ACTION_SEND
+                                    ).apply {
+
+                                        type =
+                                            "text/plain"
+
+                                        putExtra(
+                                            Intent.EXTRA_SUBJECT,
+                                            "ChainPay payment request"
+                                        )
+
+                                        putExtra(
+                                            Intent.EXTRA_TEXT,
+                                            shareText
+                                        )
+                                    }
+
+                                context.startActivity(
+                                    Intent.createChooser(
+                                        shareIntent,
+                                        "Share payment request"
+                                    )
+                                )
+                            },
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                        ) {
+
+                            Text(
+                                "Share Payment Request"
+                            )
+                        }
+
                         if (
                             receivedTransactionHash !=
                                 null
@@ -1608,7 +1864,7 @@ private fun MerchantReceiveScreen(
 
                             Text(
                                 text =
-                                    "PAID",
+                                    "Payment received",
                                 style =
                                     MaterialTheme
                                         .typography
@@ -1761,7 +2017,7 @@ private fun MerchantReceiveScreen(
 
                             Text(
                                 text =
-                                    "AWAITING PAYMENT",
+                                    "Awaiting customer payment",
                                 style =
                                     MaterialTheme
                                         .typography
@@ -1797,7 +2053,7 @@ private fun MerchantReceiveScreen(
                                     ) {
                                         "Confirming Sepolia transaction..."
                                     } else {
-                                        "Waiting for transaction submission"
+                                        "Waiting for the customer to submit payment"
                                     },
                                 style =
                                     MaterialTheme
@@ -1805,53 +2061,6 @@ private fun MerchantReceiveScreen(
                                         .bodyMedium
                             )
 
-                            if (
-                                merchantAddress.isNotBlank()
-                            ) {
-
-                                Button(
-                                    onClick = {
-
-                                        MerchantRequestStore
-                                            .armForWalletResponse(
-                                                context
-                                            )
-
-                                        TestPaymentRequester
-                                            .sendPayment(
-                                                context =
-                                                    context,
-                                                walletAddress =
-                                                    merchantAddress,
-                                                recipientAddress =
-                                                    merchantAddress,
-                                                amountEth =
-                                                    requestedAmount
-                                            )
-                                    },
-                                    enabled =
-                                        !isCheckingPayment &&
-                                            receivedTransactionHash ==
-                                                null,
-                                    modifier =
-                                        Modifier
-                                            .fillMaxWidth()
-                                ) {
-
-                                    Text(
-                                        "Developer: Test Pay This Request"
-                                    )
-                                }
-
-                                Text(
-                                    text =
-                                        "Development helper only: simulates the customer paying this exact request from the connected wallet.",
-                                    style =
-                                        MaterialTheme
-                                            .typography
-                                            .bodySmall
-                                )
-                            }
 
                             paymentMonitorError
                                 ?.let {
@@ -2150,15 +2359,3 @@ private fun generatePaymentQrCode(
             )
         }
 }
-
-
-
-
-
-
-
-
-
-
-
-
